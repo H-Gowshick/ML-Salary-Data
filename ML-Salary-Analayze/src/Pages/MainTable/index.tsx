@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Card } from 'antd'; 
-import Papa from 'papaparse'; 
-import { useNavigate } from 'react-router-dom'; 
-import csvData from '../../assets/ML-Salary-Data/salaries.csv?raw'; 
-import './styles.css'; 
+import React, { useState, useEffect } from "react";
+import { Table, Card } from "antd";
+import Papa from "papaparse";
+import { useNavigate } from "react-router-dom";
+import csvData from "../../assets/ML-Salary-Data/salaries.csv?raw";
+import "./styles.css";
 
 // Interface for each row of the main table
 interface DataRow {
@@ -11,7 +11,7 @@ interface DataRow {
   year: number;
   totalJobs: number;
   averageSalary: number | null;
-  jobTitles: Record<string, number>; 
+  jobTitles: Record<string, number>;
 }
 
 // Interface for each row of the CSV data
@@ -22,7 +22,7 @@ interface CSVRow {
 }
 
 // Main component for the main table
- const MainTable: React.FC = () => {
+const MainTable: React.FC = () => {
   const [data, setData] = useState<DataRow[]>([]); // State for storing table data
   const navigate = useNavigate(); // React Router navigation function
 
@@ -31,19 +31,27 @@ interface CSVRow {
     const parsed = Papa.parse<CSVRow>(csvData, {
       header: true,
       skipEmptyLines: true,
-      transformHeader: header => header.trim(),
+      transformHeader: (header) => header.trim(),
       transform: (value, header) => {
-        if (header === 'work_year' || header === 'salary_in_usd') {
+        if (header === "work_year" || header === "salary_in_usd") {
           return parseFloat(value);
         }
         return value;
-      }
+      },
     });
 
     // Grouping parsed data by year and calculating total jobs, total salary, and job titles
     const groupedData = parsed.data.reduce(
       (
-        acc: Record<number, { year: number; totalJobs: number; totalSalary: number; jobTitles: Record<string, number> }>,
+        acc: Record<
+          number,
+          {
+            year: number;
+            totalJobs: number;
+            totalSalary: number;
+            jobTitles: Record<string, number>;
+          }
+        >,
         row
       ) => {
         const year = row.work_year;
@@ -75,34 +83,37 @@ interface CSVRow {
         year: Number(year),
         totalJobs,
         averageSalary: totalJobs > 0 ? totalSalary / totalJobs : null,
-        jobTitles, 
+        jobTitles,
       })
     );
     setData(formattedData); // Setting formatted data into state
-  }, []); 
+  }, []);
 
   // Function to handle row click, navigates to another page with selected year's data
   const handleRowClick = (year: number) => {
-    const selectedYearData = data.find(item => item.year === year);
+    const selectedYearData = data.find((item) => item.year === year);
     if (!selectedYearData) return;
-    const jobTitleData = Object.entries(selectedYearData.jobTitles).map(([jobTitle, jobCount]) => ({
-      key: jobTitle,
-      jobTitle,
-      jobCount,
-    }));
-    navigate('/second-table', { state: { year, jobTitleData } });
+    const jobTitleData = Object.entries(selectedYearData.jobTitles).map(
+      ([jobTitle, jobCount]) => ({
+        key: jobTitle,
+        jobTitle,
+        jobCount,
+      })
+    );
+    navigate("/second-table", { state: { year, jobTitleData } });
   };
 
   // Columns configuration for the table
   const columns = [
-    { title: 'Year', dataIndex: 'year', key: 'year', width: 460 },
-    { title: 'Number of Total Jobs', dataIndex: 'totalJobs', key: 'totalJobs' },
+    { title: "Year", dataIndex: "year", key: "year", width: 460 },
+    { title: "Number of Total Jobs", dataIndex: "totalJobs", key: "totalJobs" },
     {
-      title: 'Average Salary in USD',
-      dataIndex: 'averageSalary',
-      key: 'averageSalary',
+      title: "Average Salary in USD",
+      dataIndex: "averageSalary",
+      key: "averageSalary",
       width: 180,
-      render: (value: number | null) => (value === null ? 'N/A' : `$${value.toFixed(2)}`),
+      render: (value: number | null) =>
+        value === null ? "N/A" : `$${value.toFixed(2)}`,
     },
   ];
 
@@ -114,7 +125,7 @@ interface CSVRow {
           columns={columns}
           pagination={false}
           className="custom-table"
-          onRow={(record) => ({
+          onRow={(record: DataRow) => ({
             onClick: () => handleRowClick(record.year),
           })}
         />
@@ -123,4 +134,4 @@ interface CSVRow {
   );
 };
 
-export default MainTable; 
+export default MainTable;
