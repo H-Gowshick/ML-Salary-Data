@@ -31,5 +31,8 @@
     "raw-loader": "^4.0.2",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
