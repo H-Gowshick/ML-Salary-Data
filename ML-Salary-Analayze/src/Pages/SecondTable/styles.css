@@ -1,0 +1,31 @@
+.table-container {
+    width: 70%;
+    margin: 20px auto;
+  }
+  
+  .custom-card {
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .custom-table {
+    table-layout: auto;
+  }
+  
+  .ant-table-thead > tr > th {
+    text-align: left;
+    padding-left: 16px;
+    background-color: #f0f2f5;
+    font-weight: bold;
+  }
+  
+  .ant-table-tbody > tr > td {
+    text-align: left;
+    padding-left: 16px;
+  }
+  
+  .ant-card-head-title {
+    font-size: 1.5em;
+    text-align: center;
+  }
+  
